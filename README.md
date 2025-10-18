@@ -17,7 +17,6 @@ Base de datos: SQLite/PostgreSQL
 Logging: Python logging + análisis de patrones
 
 ¿Cómo usarlo?
-
 Levanta el servidor en local
 Genera códigos QR desde la interfaz
 Monitorea intentos en el dashboard
@@ -25,5 +24,7 @@ Analiza los datos capturados
 
 Notas importantes:
 ✅ Úsalo en tu propio entorno o laboratorio controlado
+
 ✅ Estudia cómo funcionan estos ataques para defenderte mejor
+
 ✅ Comparte conocimiento, no malicia
