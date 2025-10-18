@@ -50,7 +50,7 @@ sudo apt install feh
 ### 1. Clonar el Repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/qr-phishing-demo.git
+git clone https://github.com/ritxi69/qr-phishing-demo.git
 cd qr-phishing-demo
 ```
 
