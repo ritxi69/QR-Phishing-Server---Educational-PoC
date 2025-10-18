@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE PILL ADO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000000;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Efecto matrix lluvia de fondo */
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .title {
+            font-size: clamp(3px, 1vw, 6px);
+            line-height: 1.1;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px #00ff00;
+            animation: pulse 2s ease-in-out infinite;
+            white-space: pre;
+            display: inline-block;
+            overflow: hidden;
+            max-width: 100%;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .robot {
+            font-size: clamp(12px, 4vw, 20px);
+            line-height: 1.1;
+            white-space: pre;
+            display: inline-block;
+            text-align: left;
+            margin: 30px auto;
+            text-shadow: 0 0 10px #00ff00;
+            animation: glitch 3s ease-in-out infinite;
+        }
+
+        @keyframes glitch {
+            0%, 90%, 100% { transform: translate(0); }
+            92% { transform: translate(-2px, 2px); }
+            94% { transform: translate(2px, -2px); }
+            96% { transform: translate(-2px, -2px); }
+        }
+
+        .message {
+            font-size: clamp(16px, 4vw, 24px);
+            margin-top: 40px;
+            letter-spacing: 4px;
+            animation: blink 1.5s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #00ff00;
+            animation: blink 1s step-end infinite;
+        }
+
+        /* Scanlines efecto CRT */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 255, 0, 0.05) 0px,
+                transparent 1px,
+                transparent 2px,
+                rgba(0, 255, 0, 0.05) 3px
+            );
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* Vignette efecto */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8);
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        @media (max-width: 600px) {
+            .robot {
+                font-size: 10px;
+            }
+            .title {
+                font-size: 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas class="matrix-bg" id="matrix"></canvas>
+    
+    <div class="container">
+        <pre class="title">
+TTTTTTTTTTTTTTTTTTTTTTTEEEEEEEEEEEEEEEEEEEEEE     HHHHHHHHH     HHHHHHHHHEEEEEEEEEEEEEEEEEEEEEE     PPPPPPPPPPPPPPPPP   IIIIIIIIIILLLLLLLLLLL             LLLLLLLLLLL                            AAA               DDDDDDDDDDDDD             OOOOOOOOO      !!!      
+T:::::::::::::::::::::TE::::::::::::::::::::E     H:::::::H     H:::::::HE::::::::::::::::::::E     P::::::::::::::::P  I::::::::IL:::::::::L             L:::::::::L                           A:::A              D::::::::::::DDD        OO:::::::::OO   !!:!!     
+T:::::::::::::::::::::TE::::::::::::::::::::E     H:::::::H     H:::::::HE::::::::::::::::::::E     P::::::PPPPPP:::::P I::::::::IL:::::::::L             L:::::::::L                          A:::::A             D:::::::::::::::DD    OO:::::::::::::OO !:::!     
+T:::::TT:::::::TT:::::TEE::::::EEEEEEEEE::::E     HH::::::H     H::::::HHEE::::::EEEEEEEEE::::E     PP:::::P     P:::::PII::::::IILL:::::::LL             LL:::::::LL                         A:::::::A            DDD:::::DDDDD:::::D  O:::::::OOO:::::::O!:::!     
+TTTTTT  T:::::T  TTTTTT  E:::::E       EEEEEE       H:::::H     H:::::H    E:::::E       EEEEEE       P::::P     P:::::P  I::::I    L:::::L                 L:::::L                          A:::::::::A             D:::::D    D:::::D O::::::O   O::::::O!:::!     
+        T:::::T          E:::::E                    H:::::H     H:::::H    E:::::E                    P::::P     P:::::P  I::::I    L:::::L                 L:::::L                         A:::::A:::::A            D:::::D     D:::::DO:::::O     O:::::O!:::!     
+        T:::::T          E::::::EEEEEEEEEE          H::::::HHHHH::::::H    E::::::EEEEEEEEEE          P::::PPPPPP:::::P   I::::I    L:::::L                 L:::::L                        A:::::A A:::::A           D:::::D     D:::::DO:::::O     O:::::O!:::!     
+        T:::::T          E:::::::::::::::E          H:::::::::::::::::H    E:::::::::::::::E          P:::::::::::::PP    I::::I    L:::::L                 L:::::L                       A:::::A   A:::::A          D:::::D     D:::::DO:::::O     O:::::O!:::!     
+        T:::::T          E:::::::::::::::E          H:::::::::::::::::H    E:::::::::::::::E          P::::PPPPPPPPP      I::::I    L:::::L                 L:::::L                      A:::::A     A:::::A         D:::::D     D:::::DO:::::O     O:::::O!:::!     
+        T:::::T          E::::::EEEEEEEEEE          H::::::HHHHH::::::H    E::::::EEEEEEEEEE          P::::P              I::::I    L:::::L                 L:::::L                     A:::::AAAAAAAAA:::::A        D:::::D     D:::::DO:::::O     O:::::O!:::!     
+        T:::::T          E:::::E                    H:::::H     H:::::H    E:::::E                    P::::P              I::::I    L:::::L                 L:::::L                    A:::::::::::::::::::::A       D:::::D     D:::::DO:::::O     O:::::O!!:!!     
+        T:::::T          E:::::E       EEEEEE       H:::::H     H:::::H    E:::::E       EEEEEE       P::::P              I::::I    L:::::L         LLLLLL  L:::::L         LLLLLL    A:::::AAAAAAAAAAAAA:::::A      D:::::D    D:::::D O::::::O   O::::::O !!!      
+      TT:::::::TT      EE::::::EEEEEEEE:::::E     HH::::::H     H::::::HHEE::::::EEEEEEEE:::::E     PP::::::PP          II::::::IILL:::::::LLLLLLLLL:::::LLL:::::::LLLLLLLLL:::::L   A:::::A             A:::::A   DDD:::::DDDDD:::::D  O:::::::OOO:::::::O          
+      T:::::::::T      E::::::::::::::::::::E     H:::::::H     H:::::::HE::::::::::::::::::::E     P::::::::P          I::::::::IL::::::::::::::::::::::LL::::::::::::::::::::::L  A:::::A               A:::::A  D:::::::::::::::DD    OO:::::::::::::OO  !!!      
+      T:::::::::T      E::::::::::::::::::::E     H:::::::H     H:::::::HE::::::::::::::::::::E     P::::::::P          I::::::::IL::::::::::::::::::::::LL::::::::::::::::::::::L A:::::A                 A:::::A D::::::::::::DDD        OO:::::::::OO   !!:!!     
+      TTTTTTTTTTT      EEEEEEEEEEEEEEEEEEEEEE     HHHHHHHHH     HHHHHHHHHEEEEEEEEEEEEEEEEEEEEEE     PPPPPPPPPP          IIIIIIIIIILLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLAAAAAAA                   AAAAAAADDDDDDDDDDDDD             OOOOOOOOO      !!!      
+        </pre>
+        
+        <pre class="robot">
+                  .-----------..
+                -               -
+               /                 \
+               /                  \
+               /    .--._    .--. |
+               |  /      -__-    \|
+               | |               ||
+               ||     ._   _.    ||
+               ||      o   o     ||
+               ||      -   -     ||
+               C|     (o\_/o)    |O
+                 \      _____    /
+                  \ ( /#####\ ) /
+            JA     \  '====='  /
+             JA     \  -___-  /
+              JA     |       |
+        </pre>
+        
+        <div class="message">LOADING<span class="cursor"></span></div>
+    </div>
+
+    <script>
+        // Efecto Matrix lluvia de caracteres
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const chars = 'THEPILLADO0123456789@#$%^&*()';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00ff00';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 35);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        // Registro de visita (envía a tu servidor)
+        fetch('/visit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                timestamp: new Date().toISOString()
+            })
+        }).catch(() => {
+            // Silenciosamente falla si no hay servidor
+        });
+    </script>
+</body>
+</html>

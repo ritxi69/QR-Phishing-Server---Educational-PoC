@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Simulación educativa — QR Demo</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#b71c1c;
+      --panel:#ffebee;
+      --text:#ffffff;
+      --muted:#ffd6d6;
+    }
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:'Press Start 2P',monospace;line-height:1.6}
+    .wrap{max-width:900px;margin:24px auto;padding:20px;}
+    .panel{background:rgba(255,255,255,0.03);border-radius:8px;padding:18px;box-shadow:0 6px 18px rgba(0,0,0,0.25)}
+    pre.ascii{font-family: monospace; white-space: pre; font-size:12px; line-height:1; color:var(--muted); margin:0 0 12px 0}
+    h1{margin:0 0 8px 0;font-size:18px}
+    p.lead{margin:8px 0 16px 0;color:rgba(255,255,255,0.95);font-size:0.7em}
+    .box{background:rgba(0,0,0,0.3);color:var(--text);padding:12px;border-radius:6px;border:2px solid rgba(255,255,255,0.1)}
+    label{display:block;margin-top:8px;font-weight:600;color:var(--text);font-size:0.65em}
+    input{width:100%;padding:8px;margin-top:6px;border-radius:4px;border:1px solid rgba(255,255,255,0.2);background:transparent;color:var(--text);box-sizing:border-box}
+    input:disabled{opacity:0.5;cursor:not-allowed}
+    button{margin-top:12px;padding:10px 14px;border-radius:6px;border:none;cursor:pointer;background:#ff5252;color:white;font-weight:700;transition:background 0.2s;font-size:0.65em}
+    button:hover:not(:disabled){background:#ff1744}
+    button:disabled{opacity:0.5;cursor:not-allowed}
+    button.secondary{background:#424242;margin-left:8px}
+    button.secondary:hover:not(:disabled){background:#616161}
+    #result{display:none;background:rgba(255,255,255,0.03);padding:12px;margin-top:12px;border-radius:6px}
+    .counter{margin-top:12px;color:rgba(255,255,255,0.95);font-weight:700;display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:0.65em}
+    .note{font-size:0.6em;color:rgba(255,255,255,0.85);margin-top:8px}
+    footer{margin-top:18px;color:rgba(255,255,255,0.8);font-size:0.6em}
+    .error{color:#ff5252;font-weight:600;margin-top:8px;display:none;font-size:0.65em}
+    .loading{opacity:0.6}
+    @media(max-width:600px){ 
+      pre.ascii{font-size:8px;overflow-x:auto}
+      .counter{font-size:0.55em}
+      .wrap{padding:10px}
+      .panel{padding:10px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="panel">
+      <h1>⚠️ SIMULACIÓN EDUCATIVA</h1>
+      <p class="lead">Esta demo ilustra cómo un QR puede redirigir a una página. <strong>No</strong> se guardan contraseñas reales — usa solo datos ficticios.</p>
+
+      <div class="box">
+        <form id="fakeForm">
+          <label for="user">Usuario (ficticio)</label>
+          <input id="user" name="user" placeholder="ejemplo@demo" required>
+          <label for="pass">Contraseña (ficticia)</label>
+          <input id="pass" name="pass" type="password" placeholder="*****" required>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+            <button type="submit" id="submitBtn">Enviar (simulación)</button>
+          </div>
+          <div class="error" id="errorMsg">Error al enviar. Intenta de nuevo.</div>
+        </form>
+
+        <div id="result">
+          <h3 style="font-size:0.8em;margin:0 0 12px 0">Resultado de la simulación</h3>
+          
+          <pre id="ascii" class="ascii">
+                 .-----------..
+                -               -
+               /                 \
+               /                  \
+               /    .--._    .--. |
+               |  /      -__-    \|
+               | |               ||
+               ||     ._   _.    ||
+               ||      o   o     ||
+               ||      -   -     ||
+               C|     (o\_/o)    |O               
+                 \      _____    /           							
+                  \ ( /#####\ ) /          
+            JA     \  '====='  /
+             JA     \  -___-  /                  
+              JA     |       |
+                     /-_____-\
+                   /           \
+                 /               \
+                /__|  AC / DC  |__\
+                | ||           |\ \
+             
+          </pre>
+
+          <div class="counter" role="status" aria-live="polite">
+            <div id="globalCount">Participaciones totales: —</div>
+            <div id="lastTime" style="font-size:0.9em;opacity:0.9">Última: —</div>
+          </div>
+
+          <p style="font-size:0.65em;margin:12px 0">Gracias, esto es una demostración educativa. <strong>No</strong> se almacenaron contraseñas reales.</p>
+          <p style="font-size:0.65em;margin:0"><strong>En un ataque real</strong> estos datos podrían usarse para phishing o suplantación.</p>
+          
+          <button type="button" id="resetBtn" class="secondary" style="margin-top:12px">Intentarlo de nuevo</button>
+        </div>
+
+        <div class="note">TRABAJO FINAL BOOTCAMP AGO-OCT DE CIBERSEGURIDAD NEOLAND 2025</div>
+      </div>
+
+      <footer>
+        <strong>Recordatorio:Esta demo registra un contador, IP y credenciales ficticias con fines educativos y de concientización</strong> 
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('fakeForm');
+    const result = document.getElementById('result');
+    const globalCountEl = document.getElementById('globalCount');
+    const lastTimeEl = document.getElementById('lastTime');
+    const asciiPre = document.getElementById('ascii');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const errorMsg = document.getElementById('errorMsg');
+    const userInput = document.getElementById('user');
+    const passInput = document.getElementById('pass');
+
+    let pollHandle = null;
+    const POLL_INTERVAL_MS = 5000;
+    const asciiTemplate = asciiPre.textContent;
+
+    function formatTimestamp(ts) {
+      if (ts === '—' || !ts) return '—';
+      try {
+        const date = new Date(ts);
+        return date.toLocaleString('es-ES', { 
+          dateStyle: 'short', 
+          timeStyle: 'short' 
+        });
+      } catch {
+        return ts;
+      }
+    }
+
+    async function fetchCountAndLast() {
+      try {
+        const [rCount, rLast] = await Promise.all([
+          fetch('/count'),
+          fetch('/last')
+        ]);
+        
+        let count = '—', last = '—';
+        
+        if (rCount.ok) count = (await rCount.text()).trim();
+        if (rLast.ok) last = (await rLast.text()).trim();
+        
+        globalCountEl.textContent = `Participaciones totales: ${count}`;
+        lastTimeEl.textContent = `Última: ${formatTimestamp(last)}`;
+
+        asciiPre.textContent = asciiTemplate
+          .replace(/<<COUNT>>/g, count)
+          .replace(/<<LAST>>/g, formatTimestamp(last));
+          
+      } catch (e) {
+        console.error('Error fetching data:', e);
+        globalCountEl.textContent = 'Participaciones totales: (error)';
+        lastTimeEl.textContent = 'Última: (error)';
+      }
+    }
+
+    function startPolling() {
+      if (pollHandle) return;
+      fetchCountAndLast();
+      pollHandle = setInterval(fetchCountAndLast, POLL_INTERVAL_MS);
+    }
+
+    function stopPolling() {
+      if (pollHandle) {
+        clearInterval(pollHandle);
+        pollHandle = null;
+      }
+    }
+
+    form.addEventListener('submit', async function(e){
+      e.preventDefault();
+      
+      submitBtn.disabled = true;
+      userInput.disabled = true;
+      passInput.disabled = true;
+      errorMsg.style.display = 'none';
+      submitBtn.classList.add('loading');
+
+      try {
+        // Capturar credenciales del formulario
+        const credentials = {
+          usuario: userInput.value,
+          password: passInput.value,
+          timestamp: new Date().toISOString()
+        };
+        
+        // Enviar al servidor
+        const response = await fetch('/meta', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(credentials)
+        });
+        
+        if (!response.ok) throw new Error('Server error');
+
+        form.style.display = 'none';
+        result.style.display = 'block';
+
+        // Obtener datos actualizados inmediatamente
+        await fetchCountAndLast();
+        
+        // Iniciar polling para mantener actualizado
+        startPolling();
+        
+      } catch (err) {
+        console.error('Error submitting:', err);
+        errorMsg.style.display = 'block';
+        
+        submitBtn.disabled = false;
+        userInput.disabled = false;
+        passInput.disabled = false;
+        submitBtn.classList.remove('loading');
+      }
+    });
+
+    resetBtn.addEventListener('click', function() {
+      stopPolling();
+      form.style.display = 'block';
+      result.style.display = 'none';
+      userInput.disabled = false;
+      passInput.disabled = false;
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('loading');
+      form.reset();
+      errorMsg.style.display = 'none';
+    });
+
+    window.addEventListener('beforeunload', stopPolling);
+    
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        stopPolling();
+      } else {
+        if (result.style.display === 'block') {
+          startPolling();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
