@@ -348,16 +348,16 @@ Ver `LICENSE` para más detalles.
 
 ## 👤 Autor
 
-**[Tu Nombre]**
+**Ricardo Andino**
 - Proyecto Final - Ciberseguridad 2025
-- Institución: [Tu Universidad/Escuela]
-- Email: [tu-email@ejemplo.com]
+- Institución: Neoland
+- Email: ritxi69@proton.me
 
 ---
 
 ## 🙏 Agradecimientos
 
-- Profesores del curso de Ciberseguridad
+- Ángel Camaño, tutor del curso de Ciberseguridad
 - Comunidad de Kali Linux
 - Ngrok y Cloudflare por sus herramientas
 - Participantes voluntarios de las demos
